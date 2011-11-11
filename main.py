@@ -81,6 +81,16 @@ class MainWin(object):
         #mew = model.PokemonType(number, name, desc)
 
         self.close_newPokeWin()
+
+    def togglePokeInfo(self, w, data=None):
+        """
+        
+        Arguments:
+        - `self`:
+        - `w`:
+        - `data`:
+        """
+        self.ui.pokeInfoPane.set_visible(not self.ui.pokeInfoPane.get_visible())
         
 
     def about_popup(self, w, data=None):
