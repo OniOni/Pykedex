@@ -156,7 +156,9 @@ class MainWin(object):
         - `w`:
         - `data`:
         """
-        self.ui.pokeInfoPane.set_visible(not self.ui.pokeInfoPane.get_visible())
+        self.ui.pokeInfoPane.set_visible(self.ui.toolBarToggleInfo.get_active())
+
+        self.ui.statusBar.push(1, 'Info pane {0} '.format('visible' if self.ui.pokeInfoPane.get_visible() else 'hidden'))
 
     def populate_InfoPane(self, w, lol=None, data=None):
         """
@@ -166,11 +168,16 @@ class MainWin(object):
         """
         selected = self.ui.pokemonTypeView.get_selection().get_selected()
         try:
+            if not self.ui.pokeInfoBox.get_visible():
+                self.ui.pokeInfoBox.set_visible(True)
+                self.ui.pokeInfoPaneLabel.set_visible(False)
+
             self.ui.infoPaneNumber.set_text(str(self.ui.pokemonTypeStore[selected[1]][0]))
             self.ui.infoPaneName.set_text(self.ui.pokemonTypeStore[selected[1]][1])
             self.ui.infoPaneDescBuff.set_text(self.ui.pokemonTypeStore[selected[1]][2])
         except Exception as e:
-            print e
+            self.ui.pokeInfoBox.set_visible(False)
+            self.ui.pokeInfoPaneLabel.set_visible(True)
         
 
     def about_popup(self, w, data=None):
