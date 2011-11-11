@@ -122,6 +122,8 @@ class MainWin(object):
         
         self.ui.connect_signals(self)
 
+        self.tmp_set_up_treeView()
+
 
 
     def start(self):
@@ -132,6 +134,34 @@ class MainWin(object):
         """
         self.ui.mainWin.show_all()
         gtk.main()
+
+    def tmp_set_up_treeView(self):
+        """
+        Stolen from http://www.eurion.net/python-snippets/snippet/Tree%20View%20Column.html
+        Arguments:
+        - `self`:
+        """
+        # create the TreeViewColumns to display the data
+        self.columnNumber = gtk.TreeViewColumn('Number')
+        self.columnName = gtk.TreeViewColumn('Name')
+
+        # add columns to treeview
+        self.ui.pokemonTypeView.append_column(self.columnNumber)
+        self.ui.pokemonTypeView.append_column(self.columnName)
+
+        # create a CellRenderers to render the data
+        self.cell = gtk.CellRendererText()
+        #self.cell1 = gtk.CellRendererText()
+
+        # add the cells to the columns - 2 in the first
+        self.columnNumber.pack_start(self.cell, True)
+        self.columnName.pack_start(self.cell, True)
+
+        # set the cell attributes to the appropriate liststore column
+        self.columnNumber.add_attribute(self.cell, 'text', 0)
+        self.columnName.add_attribute(self.cell, 'text', 1)
+
+
         
 
 if __name__ == '__main__':
