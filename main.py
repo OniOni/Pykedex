@@ -59,8 +59,6 @@ class MainWin(object):
         - `self`:
         """
         self.ui.newPokeWin.show_all()
-        
-        #self.statusBar.push(1, 'New pokemon created.')
 
     def close_newPokeWin(self, w=None, data=None):
         self.ui.newPokeWin.hide()
@@ -78,7 +76,11 @@ class MainWin(object):
 
         #Persist pokemon here
         print number, ' : ', name, '\n', desc
-        #mew = model.PokemonType(number, name, desc)
+        poke = model.PokemonType(number, name, desc)
+        self.session.add(poke)
+
+        self.ui.pokemonTypeStore.append([number, name, desc])
+        self.ui.statusBar.push(1, 'New pokemon created.')
 
         self.close_newPokeWin()
 
@@ -91,6 +93,20 @@ class MainWin(object):
         - `data`:
         """
         self.ui.pokeInfoPane.set_visible(not self.ui.pokeInfoPane.get_visible())
+
+    def populate_InfoPane(self, w, lol=None, data=None):
+        """
+    
+        Arguments:
+        - `self`:
+        """
+        selected = self.ui.pokemonTypeView.get_selection().get_selected()
+        try:
+            self.ui.infoPaneNumber.set_text(str(self.ui.pokemonTypeStore[selected[1]][0]))
+            self.ui.infoPaneName.set_text(self.ui.pokemonTypeStore[selected[1]][1])
+            self.ui.infoPaneDescBuff.set_text(self.ui.pokemonTypeStore[selected[1]][2])
+        except Exception as e:
+            print e
         
 
     def about_popup(self, w, data=None):
@@ -108,8 +124,8 @@ class MainWin(object):
         self.ui.statusBar.pop(1)
 
 
-    def populate_list(self, session):
-        for p in session.query(model.PokemonType).order_by(model.PokemonType.id):
+    def populate_list(self):
+        for p in self.session.query(model.PokemonType).order_by(model.PokemonType.id):
             print p.id, p.name, p.description
             self.ui.pokemonTypeStore.append([p.id, p.name, p.description])
         
@@ -161,6 +177,15 @@ class MainWin(object):
         self.columnNumber.add_attribute(self.cell, 'text', 0)
         self.columnName.add_attribute(self.cell, 'text', 1)
 
+        # make treeview searchable
+        self.ui.pokemonTypeView.set_search_column(1)
+
+        # Allow sorting on the column
+        self.columnNumber.set_sort_column_id(0)
+
+        # Allow drag and drop reordering of rows
+        self.ui.pokemonTypeView.set_reorderable(True)
+
 
         
 
@@ -174,7 +199,7 @@ if __name__ == '__main__':
     session.add(mew)
 
     mine = MainWin('ui.xml', session)
-    mine.populate_list(session)                
+    mine.populate_list()                
     mine.start()
 
     
