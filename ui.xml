@@ -262,6 +262,7 @@
                 <property name="label" translatable="yes">Edit Pokemon</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-edit</property>
+                <signal name="clicked" handler="edit_pok" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -288,6 +289,7 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-info</property>
                 <signal name="toggled" handler="togglePokeInfo" swapped="no"/>
+                <signal name="toggled" handler="populate_InfoPane" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -535,6 +537,9 @@
       </object>
     </child>
   </object>
+  <object class="GtkTextBuffer" id="newPokeDescBuff">
+    <property name="text" translatable="yes">A short description...</property>
+  </object>
   <object class="GtkDialog" id="newPokeWin">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -719,7 +724,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="saveNewPoke">
                 <property name="label">gtk-save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -732,6 +737,22 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="saveEditPoke">
+                <property name="label">gtk-save</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="save_editedPoke" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -761,7 +782,7 @@
                     <property name="wrap_mode">word</property>
                     <property name="left_margin">5</property>
                     <property name="right_margin">5</property>
-                    <property name="buffer">textbuffer1</property>
+                    <property name="buffer">newPokeDescBuff</property>
                   </object>
                 </child>
               </object>
@@ -785,7 +806,8 @@
     </child>
     <action-widgets>
       <action-widget response="0">button2</action-widget>
-      <action-widget response="0">button1</action-widget>
+      <action-widget response="0">saveNewPoke</action-widget>
+      <action-widget response="0">saveEditPoke</action-widget>
     </action-widgets>
   </object>
   <object class="GtkListStore" id="pokemonTypeStore">
@@ -797,8 +819,5 @@
       <!-- column-name Description -->
       <column type="gchararray"/>
     </columns>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">A short description...</property>
   </object>
 </interface>

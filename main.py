@@ -60,27 +60,91 @@ class MainWin(object):
         """
         self.ui.newPokeWin.show_all()
 
+    def edit_pok(self, w, date=None):
+        """
+        
+        Arguments:
+        - `self`:
+        - `w`:
+        - `date`:
+        """
+        selected = self.ui.pokemonTypeView.get_selection().get_selected()
+        try:
+            self.ui.newPokeNumber.set_value(self.ui.pokemonTypeStore[selected[1]][0])
+            self.ui.newPokeName.set_text(self.ui.pokemonTypeStore[selected[1]][1])
+            self.ui.newPokeDescBuff.set_text(self.ui.pokemonTypeStore[selected[1]][2])
+        except Exception as e:
+            print e
+
+        self.ui.newPokeWin.show_all()
+
+        self.ui.saveNewPoke.set_visible(False)
+        self.ui.saveEditPoke.set_visible(True)
+
+        
+        #TODO
+        #self.ui.newPokeType1.set_active(0)
+        #self.ui.newPokeType2.set_active(0)
+
+
     def close_newPokeWin(self, w=None, data=None):
         self.ui.newPokeWin.hide()
         self.ui.newPokeNumber.set_value(0)
         self.ui.newPokeName.set_text('')
+        self.ui.newPokeDescBuff.set_text('')
         self.ui.newPokeType1.set_active(0)
         self.ui.newPokeType2.set_active(0)
 
 
-    def save_newPoke(self, w, data=None):
+    def getPokemonTypeFromPropWin(self):
+        """
+        
+        Arguments:
+        - `self`:
+        """
         number = int(self.ui.newPokeNumber.get_value())
         name = self.ui.newPokeName.get_text()
         buff = self.ui.newPokeDesc.get_buffer()
         desc = buff.get_text(buff.get_start_iter(), buff.get_end_iter(), True)
-
-        #Persist pokemon here
-        print number, ' : ', name, '\n', desc
+        
         poke = model.PokemonType(number, name, desc)
-        self.session.add(poke)
 
-        self.ui.pokemonTypeStore.append([number, name, desc])
+        return poke
+
+
+    def save_newPoke(self, w, data=None):
+        p = self.getPokemonTypeFromPropWin()
+        #Persist pokemon here
+        self.session.add(p)
+
+        self.ui.pokemonTypeStore.append([p.id, p.name, p.description])
         self.ui.statusBar.push(1, 'New pokemon created.')
+
+        self.close_newPokeWin()
+
+
+    def save_editedPoke(self, w=None, data=None):
+        """
+        
+        Arguments:
+        - `self`:
+        - `w`:
+        - `data`:
+        """
+        pokemon = self.getPokemonTypeFromPropWin()
+
+        selected = self.ui.pokemonTypeView.get_selection().get_selected()
+
+        self.ui.pokemonTypeStore[selected[1]][0] = pokemon.id
+        self.ui.pokemonTypeStore[selected[1]][1] = pokemon.name
+        self.ui.pokemonTypeStore[selected[1]][2] = pokemon.description
+
+        self.session.add(pokemon)
+
+        self.ui.saveNewPoke.set_visible(True)
+        self.ui.saveEditPoke.set_visible(False)
+
+        self.ui.statusBar.push(1, 'Pokemon edited')
 
         self.close_newPokeWin()
 
