@@ -50,6 +50,7 @@ class MainWin(object):
     """
 
     def quit_app(self, w, data=None):
+        self.session.commit()
         gtk.main_quit()
 
     def new_pok(self, w, data=None):
@@ -139,7 +140,7 @@ class MainWin(object):
         self.ui.pokemonTypeStore[selected[1]][1] = pokemon.name
         self.ui.pokemonTypeStore[selected[1]][2] = pokemon.description
 
-        self.session.add(pokemon)
+        self.session.merge(pokemon)
 
         self.ui.saveNewPoke.set_visible(True)
         self.ui.saveEditPoke.set_visible(False)
@@ -262,12 +263,10 @@ class MainWin(object):
 
 if __name__ == '__main__':
     #sqlite
-    engine = sqla.create_engine('sqlite:///:memory:', echo=True)
+    engine = sqla.create_engine('sqlite:///:pokemon.db', echo=True)
     Session = sessionmaker(bind=engine)
     model.Base.metadata.create_all(engine)
-    mew = model.PokemonType(151, 'Mew', 'Crazy_shit')
     session = Session()
-    session.add(mew)
 
     mine = MainWin('ui.xml', session)
     mine.populate_list()                
