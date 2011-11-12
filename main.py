@@ -211,6 +211,7 @@ class MainWin(object):
         self.ui.connect_signals(self)
 
         self.tmp_set_up_treeView()
+        self.set_up_type_combobox()
 
 
 
@@ -222,6 +223,28 @@ class MainWin(object):
         """
         self.ui.mainWin.show_all()
         gtk.main()
+
+    def set_up_type_combobox(self):
+        """
+        
+        Arguments:
+        - `self`:
+        """
+        
+        #Set up model
+        for t in self.session.query(model.Type).order_by(model.Type.name):
+            print t.name
+            self.ui.typeStore.append([t.id, t.name])
+
+        #Set up view
+        renderer_text = gtk.CellRendererText()
+
+        self.ui.newPokeType1.pack_start(renderer_text, True)
+        self.ui.newPokeType1.add_attribute(renderer_text, "text", 1)
+
+        self.ui.newPokeType2.pack_start(renderer_text, True)
+        self.ui.newPokeType2.add_attribute(renderer_text, "text", 1)
+
 
     def tmp_set_up_treeView(self):
         """

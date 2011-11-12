@@ -18,3 +18,22 @@ class PokemonType(Base):
         self.name = name
         self.description = description
         
+class Type(Base):
+    """
+    """
+    __tablename__ = 'type'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+
+    def __init__(self, name):
+        """
+        
+        Arguments:
+        - `self`:
+        - `name`:
+        """
+        self.name = name
+
+

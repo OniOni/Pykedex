@@ -682,14 +682,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="newPokeType1">
+                  <object class="GtkComboBox" id="newPokeType1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <items>
-                      <item translatable="yes">Fire</item>
-                      <item translatable="yes">Water</item>
-                      <item translatable="yes">Plant</item>
-                    </items>
+                    <property name="model">typeStore</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -698,14 +694,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="newPokeType2">
+                  <object class="GtkComboBox" id="newPokeType2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <items>
-                      <item translatable="yes">Fire</item>
-                      <item translatable="yes">Water</item>
-                      <item translatable="yes">Plant</item>
-                    </items>
+                    <property name="model">typeStore</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -841,6 +833,14 @@
       <!-- column-name Name -->
       <column type="gchararray"/>
       <!-- column-name Description -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="typeStore">
+    <columns>
+      <!-- column-name id -->
+      <column type="guint"/>
+      <!-- column-name name -->
       <column type="gchararray"/>
     </columns>
   </object>
