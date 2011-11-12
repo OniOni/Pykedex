@@ -177,12 +177,17 @@ class MainWin(object):
                 self.ui.pokeInfoBox.set_visible(True)
                 self.ui.pokeInfoPaneLabel.set_visible(False)
 
+                
+            self.ui.infoPaneImage.set_from_file('img/{0}.png'.format(str(self.ui.pokemonTypeStore[selected[1]][0])))
+
             self.ui.infoPaneNumber.set_text(str(self.ui.pokemonTypeStore[selected[1]][0]))
             self.ui.infoPaneName.set_text(self.ui.pokemonTypeStore[selected[1]][1])
             self.ui.infoPaneDescBuff.set_text(self.ui.pokemonTypeStore[selected[1]][2])
+            
         except Exception as e:
             self.ui.pokeInfoBox.set_visible(False)
             self.ui.pokeInfoPaneLabel.set_visible(True)
+            print e
         
 
     def about_popup(self, w, data=None):
