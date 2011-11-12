@@ -349,6 +349,18 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
+                      <object class="GtkImage" id="image1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-missing-image</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -485,7 +497,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -640,6 +652,19 @@
                     <property name="position">3</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="label11">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Image</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -698,11 +723,24 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">typeStore</property>
+                    <property name="active">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFileChooserButton" id="filechooserbutton1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>

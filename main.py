@@ -96,6 +96,10 @@ class MainWin(object):
         self.ui.newPokeType1.set_active(0)
         self.ui.newPokeType2.set_active(0)
 
+        if self.ui.saveEditPoke.get_visible():
+            self.ui.saveNewPoke.set_visible(True)
+            self.ui.saveEditPoke.set_visible(False)
+
 
     def getPokemonTypeFromPropWin(self):
         """
@@ -233,7 +237,6 @@ class MainWin(object):
         
         #Set up model
         for t in self.session.query(model.Type).order_by(model.Type.name):
-            print t.name
             self.ui.typeStore.append([t.id, t.name])
 
         #Set up view
