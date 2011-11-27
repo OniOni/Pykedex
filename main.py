@@ -44,6 +44,14 @@ class UI(object):
         self._builder.connect_signals(o)
 
 
+def populate_db(session):
+    l = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison",
+         "Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark",
+         "Steel"]
+
+    for n in l:
+        p = model.Type(n)
+        session.add(p)
 
 class MainWin(object):
     """
@@ -70,12 +78,24 @@ class MainWin(object):
         - `date`:
         """
         selected = self.ui.pokemonTypeView.get_selection().get_selected()
+        poke = self.session.query(model.PokemonType).filter_by(id=self.ui.pokemonTypeStore[selected[1]][0]).one()
+        print "selected pokemon : " + repr(poke)
+
         try:
             self.ui.newPokeNumber.set_value(self.ui.pokemonTypeStore[selected[1]][0])
             self.ui.newPokeName.set_text(self.ui.pokemonTypeStore[selected[1]][1])
             self.ui.newPokeDescBuff.set_text(self.ui.pokemonTypeStore[selected[1]][2])
         except Exception as e:
             print e
+
+        
+        poke.types
+        try:            
+            self.ui.newPokeType1.set_active_id(poke.types[0].name)
+            self.ui.newPokeType2.set_active_id(poke.types[1].name)
+        except IndexError as e:
+            print e
+
 
         self.ui.newPokeWin.show_all()
 
@@ -113,6 +133,12 @@ class MainWin(object):
         desc = buff.get_text(buff.get_start_iter(), buff.get_end_iter(), True)
         
         poke = model.PokemonType(number, name, desc)
+        
+        type1 = self.typeList[self.ui.newPokeType1.get_active_id()]
+        type2 = self.typeList[self.ui.newPokeType2.get_active_id()]
+        poke.types += [type1, type2]
+
+        print (type1, type2)
 
         return poke
 
@@ -153,6 +179,7 @@ class MainWin(object):
 
         self.close_newPokeWin()
 
+
     def togglePokeInfo(self, w, data=None):
         """
         
@@ -177,12 +204,26 @@ class MainWin(object):
                 self.ui.pokeInfoBox.set_visible(True)
                 self.ui.pokeInfoPaneLabel.set_visible(False)
 
-                
+            poke = self.session.query(model.PokemonType).filter_by(id=self.ui.pokemonTypeStore[selected[1]][0]).one()
+                            
             self.ui.infoPaneImage.set_from_file('img/{0}.png'.format(str(self.ui.pokemonTypeStore[selected[1]][0])))
 
             self.ui.infoPaneNumber.set_text(str(self.ui.pokemonTypeStore[selected[1]][0]))
             self.ui.infoPaneName.set_text(self.ui.pokemonTypeStore[selected[1]][1])
             self.ui.infoPaneDescBuff.set_text(self.ui.pokemonTypeStore[selected[1]][2])
+
+            poke.types
+
+            try:
+                self.ui.infoPaneType1.set_text(poke.types[0].name)
+            except IndexError:
+                self.ui.infoPaneType1.set_text("None")
+
+            try:
+                self.ui.infoPaneType2.set_text(poke.types[1].name)
+            except IndexError:
+                self.ui.infoPaneType2.set_text("None")
+
             
         except Exception as e:
             self.ui.pokeInfoBox.set_visible(False)
@@ -214,6 +255,7 @@ class MainWin(object):
     def __init__(self, ui, session):
         """
         """
+        print "set up"
         self.session = session
         self.ui = UI(ui)
         
@@ -221,6 +263,7 @@ class MainWin(object):
 
         self.tmp_set_up_treeView()
         self.set_up_type_combobox()
+        print self.typeList
 
 
 
@@ -233,6 +276,7 @@ class MainWin(object):
         self.ui.mainWin.show_all()
         gtk.main()
 
+
     def set_up_type_combobox(self):
         """
         
@@ -240,8 +284,11 @@ class MainWin(object):
         - `self`:
         """
         
+        self.typeList = {}
+
         #Set up model
         for t in self.session.query(model.Type).order_by(model.Type.name):
+            self.typeList[t.name] = t
             self.ui.typeStore.append([t.id, t.name])
 
         #Set up view

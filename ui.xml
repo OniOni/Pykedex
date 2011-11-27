@@ -711,6 +711,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">typeStore</property>
+                    <property name="active">0</property>
+                    <property name="id_column">1</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -724,6 +726,7 @@
                     <property name="can_focus">False</property>
                     <property name="model">typeStore</property>
                     <property name="active">0</property>
+                    <property name="id_column">1</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
