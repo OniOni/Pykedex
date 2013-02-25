@@ -340,14 +340,25 @@ class MainWin(object):
         
 
 if __name__ == '__main__':
+    # Check if db empty
+    db_exists = True
+    try:
+        f = open('pokemon.db')
+        f.close()
+    except IOError:
+        db_exists = False
+
     #sqlite
-    engine = sqla.create_engine('sqlite:///:pokemon.db', echo=True)
+    engine = sqla.create_engine('sqlite:///pokemon.db', echo=True)
     Session = sessionmaker(bind=engine)
     model.Base.metadata.create_all(engine)
     session = Session()
 
+    if not db_exists:
+        populate_db(session)
+
     mine = MainWin('ui.xml', session)
-    mine.populate_list()                
+    mine.populate_list()
     mine.start()
 
     
